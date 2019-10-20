@@ -22,14 +22,14 @@
                     <div class="row">
                         <div class="col-md-3" *ngFor="let element of elementFormGroup.controls; let i = index;">
                             <div [formGroupName]="i" class="row">
-                                <div class="form-group">
+                                <div class="form-group col-12">
                                     <label>Array element {{i}}</label>
                                     <input class="form-control" formControlName="element" type="number" min="0" step="1">
                                     <span class="text-danger" *ngIf="getElementFormGroup(i).controls['element'].touched && getElementFormGroup(i).controls['element'].hasError('required')">
                                     Field is required! </span>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-danger" type="button" (click)="removeElement(i)"> Remove </button>
+                                    <div class="form-group mt-3">
+                                        <button class="btn btn-danger" type="button" (click)="removeElement(i)"> Remove </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
