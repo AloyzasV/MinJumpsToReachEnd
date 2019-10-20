@@ -9,12 +9,19 @@ class ApiController extends Controller
 {
     public function findShortestPath(Request $request)
     {
-       $array = array(2, 1, 1, 2, 3, 4, 5, 1, 2, 8);
+        $array = array();
+        foreach ($request->input('numbers_array') as $key => $array_element) {
+           array_push($array, $array_element['element']);
+        }
 
-       $steps[0] = 0;
-       $path_key = 0;
+        if (count($array)  <= 1) {
+            return response()->json(['message' => 'Add more elments to array', 'path' => null, 'steps' => null]);
+        }
 
-       for ($i = 1; $i < count($array); $i++) {
+        $steps[0] = 0;
+        $path_key = 0;
+
+        for ($i = 1; $i < count($array); $i++) {
             if ($steps[$i-1] !== PHP_INT_MAX) {
                 $steps[$i] = PHP_INT_MAX;
                 for ($j = 0; $j < $i; $j++) { 
@@ -25,11 +32,11 @@ class ApiController extends Controller
                 }
                 if ($steps[$i] > $steps[$i-1]) {
                     $path[$path_key++] = $array[$i-1];
-                } 
+                }
             } else {
-                return response()->json(['error' => 'End of array is unreachable']);
+                return response()->json(['message' => 'End of array is unreachable', 'path' => null, 'steps' => null]);
             }
         }
-        return response()->json(['success' => 'You reached the end!', 'path' => $path, 'steps' => count($path)]);
+        return response()->json(['message' => 'You reached the end!', 'path' => $path, 'steps' => count($path)]);
     }
 }
