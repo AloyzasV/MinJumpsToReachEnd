@@ -22,19 +22,20 @@ class ApiController extends Controller
         $path_key = 0;
 
         for ($i = 1; $i < count($array); $i++) {
-            if ($steps[$i-1] !== PHP_INT_MAX) {
-                $steps[$i] = PHP_INT_MAX;
-                for ($j = 0; $j < $i; $j++) { 
-                    if ($i <= $j + $array[$j]) { 
-                        $steps[$i] = min($steps[$i], $steps[$j] + 1); 
-                        break; 
-                    } 
-                }
-                if ($steps[$i] > $steps[$i-1]) {
-                    $path[$path_key++] = $array[$i-1];
-                }
-            } else {
+            $steps[$i] = PHP_INT_MAX;
+            for ($j = 0; $j < $i; $j++) { 
+                if ($i <= $j + $array[$j]) { 
+                    $steps[$i] = min($steps[$i], $steps[$j] + 1); 
+                    break; 
+                } 
+            }
+
+            if ($steps[$i] === PHP_INT_MAX) {
                 return response()->json(['message' => 'End of array is unreachable', 'path' => null, 'steps' => null]);
+            }
+
+            if ($steps[$i] > $steps[$i-1]) {
+                $path[$path_key++] = $array[$i-1];
             }
         }
         return response()->json(['message' => 'You reached the end!', 'path' => $path, 'steps' => count($path)]);
